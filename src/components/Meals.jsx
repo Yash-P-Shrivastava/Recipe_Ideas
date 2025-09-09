@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import { FunnelIcon, XMarkIcon, HomeIcon } from "@heroicons/react/24/outline";
 
 const MealsPage = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const prevState = location.state;
+ 
 
   const [categories, setCategories] = useState([]);
   const [areas, setAreas] = useState([]);
-  const [meals, setMeals] = useState(prevState?.meals || []);
+  const [meals, setMeals] = useState([]);
   const [ingredient, setIngredient] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(
-    prevState?.selectedCategory || ""
-  );
-  const [selectedArea, setSelectedArea] = useState(
-    prevState?.selectedArea || ""
-  );
+  const [selectedCategory, setSelectedCategory] = useState( "");
+  const [selectedArea, setSelectedArea] = useState( "");
   const [loading, setLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
@@ -24,9 +19,7 @@ const MealsPage = () => {
   useEffect(() => {
     fetchCategories();
     fetchAreas();
-    if (!prevState) {
       fetchMeals("Chicken"); // default meals only if not coming back
-    }
   }, []);
 
   // Fetch categories
@@ -133,9 +126,7 @@ const MealsPage = () => {
       const res = await fetch("https://www.themealdb.com/api/json/v1/1/random.php");
       const data = await res.json();
       const meal = data.meals[0];
-      navigate(`/recipies/${meal.idMeal}`, {
-        state: { selectedArea, selectedCategory, meals },
-      });
+      navigate(`/recipies/${meal.idMeal}`);
     } catch (err) {
       console.error("Error fetching random meal:", err);
     }
